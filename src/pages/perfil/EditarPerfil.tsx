@@ -9,15 +9,13 @@ import Usuario from "../../models/Usuario";
 import { atualizar, buscar } from "../../services/Service";
 import { ToastAlerta } from "../../utils/ToastAlerta";
 
-
-
 export default function EditarPerfil() {
-
   const navigate = useNavigate();
 
   const { usuario, setUsuario, handleLogout } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [listaCargos, setListaCargos] = useState<Cargo[]>([]);
+
   const [usuarioEditar, setUsuarioEditar] = useState<Usuario>({
     id: Number(""),
     nome: "",
@@ -75,12 +73,13 @@ export default function EditarPerfil() {
   }
 
   function retornar() {
-    navigate("/login");
+    navigate("/login"); 
   }
 
   async function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       await atualizar("/usuario/atualizar", usuarioEditar, setUsuario, {
         headers: {
@@ -89,10 +88,11 @@ export default function EditarPerfil() {
       });
 
       ToastAlerta("Dados atualizados com sucesso!", "sucesso");
-      ToastAlerta("Por motivos de segurança o usuario foi deslogado", "info");
+      ToastAlerta("Por motivos de segurança o usuário foi deslogado", "info");
+
       handleLogout();
       setIsLoading(false);
-      retornar();
+      retornar(); 
     } catch (error) {
       ToastAlerta("Erro ao atualizar dados. Verifique os campos.", "error");
       setIsLoading(false);
@@ -114,8 +114,9 @@ export default function EditarPerfil() {
     if (usuario.token === "") {
       return;
     }
+
     if (!usuario.token) {
-      ToastAlerta("Você precisa estar Logado!", "info");
+      ToastAlerta("Você precisa estar logado!", "info");
       handleLogout();
       navigate("/");
     } else {
@@ -131,9 +132,7 @@ export default function EditarPerfil() {
     }
   }, [usuario.token]);
 
-
   return (
-
     <div className="flex min-h-screen relative justify-between">
       <img src={bgeditar1} alt="decorativo" className="sticky top-0 h-screen" />
 
@@ -142,9 +141,7 @@ export default function EditarPerfil() {
 
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="mb-2">
-            <label className="block text-text mb-1" htmlFor="nome">
-              Nome
-            </label>
+            <label className="block text-text mb-1" htmlFor="nome">Nome</label>
             <input
               type="text"
               id="nome"
@@ -152,16 +149,12 @@ export default function EditarPerfil() {
               placeholder="Digite seu nome completo"
               className="w-full px-4 py-2 text-rh-primarygrey border border-border rounded focus:outline-none focus:ring-2 focus:ring-rh-primaryblue"
               value={usuarioEditar.nome}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                atualizarEstado(e)
-              }
+              onChange={atualizarEstado}
             />
           </div>
 
           <div className="mb-2">
-            <label className="block text-text mb-1" htmlFor="usuario">
-              Email
-            </label>
+            <label className="block text-text mb-1" htmlFor="usuario">Email</label>
             <input
               type="email"
               id="usuario"
@@ -169,33 +162,25 @@ export default function EditarPerfil() {
               placeholder="Exemplo@email.com"
               className="w-full px-4 py-2 text-rh-primarygrey border border-border rounded focus:outline-none focus:ring-2 focus:ring-rh-primaryblue"
               value={usuarioEditar.usuario}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                atualizarEstado(e)
-              }
+              onChange={atualizarEstado}
             />
           </div>
 
           <div className="mb-2">
-            <label className="block text-text mb-1" htmlFor="senha">
-              Senha
-            </label>
+            <label className="block text-text mb-1" htmlFor="senha">Senha</label>
             <input
               type="password"
               id="senha"
               name="senha"
-              placeholder="Minimo 8 caracteres"
+              placeholder="Mínimo 8 caracteres"
               className="w-full px-4 py-2 text-rh-primarygrey border border-border rounded focus:outline-none focus:ring-2 focus:ring-rh-primaryblue"
               value={usuarioEditar.senha}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                atualizarEstado(e)
-              }
+              onChange={atualizarEstado}
             />
           </div>
 
           <div className="mb-2">
-            <label className="block text-text mb-1" htmlFor="foto">
-              Foto
-            </label>
+            <label className="block text-text mb-1" htmlFor="foto">Foto</label>
             <input
               type="text"
               id="foto"
@@ -203,27 +188,21 @@ export default function EditarPerfil() {
               placeholder="Coloque o link da foto aqui"
               className="w-full px-4 py-2 text-rh-primarygrey border border-border rounded focus:outline-none focus:ring-2 focus:ring-rh-primaryblue"
               value={usuarioEditar.foto}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                atualizarEstado(e)
-              }
+              onChange={atualizarEstado}
             />
           </div>
 
           <div className="mb-2">
-            <label className="block text-text mb-1" htmlFor="cargo">
-              Cargo
-            </label>
+            <label className="block text-text mb-1" htmlFor="cargo">Cargo</label>
             <select
               required
               value={usuarioEditar.cargo?.id || ""}
               name="cargo"
               id="cargo"
-              className="w-full rounded-sm text-rh-primarygrey border bg-white px-3 py-2 text-md placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-rh-primaryblue disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-200"
+              className="w-full rounded-sm text-rh-primarygrey border bg-white px-3 py-2 text-md focus:outline-none focus:ring-2 focus:ring-rh-primaryblue"
               onChange={atualizarCargo}
             >
-              <option value="" disabled>
-                Selecione um cargo
-              </option>
+              <option value="" disabled>Selecione um cargo</option>
               {listaCargos.map((cargo) => (
                 <option key={cargo.id} value={cargo.id}>
                   {cargo.nome}
@@ -235,7 +214,7 @@ export default function EditarPerfil() {
           <div className="flex justify-center gap-6">
             <button
               type="submit"
-              className="bg-rh-primaryblue text-rh-primary-50 px-10 py-2 rounded hover:bg-rh-secondaryblue transition-colors"
+              className="bg-rh-primaryblue text-white px-10 py-2 rounded hover:bg-rh-secondaryblue transition-colors"
             >
               {isLoading ? (
                 <RotatingLines
@@ -252,18 +231,16 @@ export default function EditarPerfil() {
 
             <button
               type="button"
-              className="bg-rh-primarygrey text-rh-primary-50 px-10 py-2 rounded hover:bg-gray-800 transition-colors"
-              onClick={() => navigate("/perfil")} // ou use a função desejada
+              className="bg-rh-primarygrey text-white px-10 py-2 rounded hover:bg-gray-800 transition-colors"
+              onClick={() => navigate("/perfil")}
             >
               Cancelar
             </button>
-
           </div>
         </form>
       </div>
 
       <img src={bgeditar2} alt="decorativo" className="sticky top-0 h-screen" />
-
     </div>
   );
 }
