@@ -7,6 +7,7 @@ import Departamento from "../../models/Departamento";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ToastAlerta } from "../../utils/ToastAlerta";
 import { atualizar, buscar, cadastrar } from "../../services/Service";
+import ConfirmModal from "../confirmmodal/ConfirmModal";
 
 function FormDepartamento() {
 
@@ -35,7 +36,7 @@ function FormDepartamento() {
     } else {
       if (id !== undefined) {
         buscar(`/departamento/${id}`, (data: Departamento) => {
-          const numeroAndar = parseInt(data.andar); // remove o "° Andar"
+          const numeroAndar = parseInt(data.andar);
           setDepartamento({ ...data, andar: numeroAndar.toString() });
         }, {
           headers: { Authorization: token },
@@ -185,11 +186,23 @@ function FormDepartamento() {
 
             </div>
             <div className="flex justify-between pb-[20px] pt-[10px]">
-              <button onClick={() => setMostrarModal(true)}
-                className="rounded text-slate-100 bg-rh-primarypurple transition-colors duration-500
-                                    hover:bg-rh-secondarypurple w-[150px] py-2  flex justify-center"
-                type="submit"
-              >
+              <button
+  type="button"
+  onClick={() => setMostrarModal(true)}
+  className="rounded text-slate-100 bg-rh-primarypurple transition-colors duration-500 hover:bg-rh-secondarypurple w-[150px] py-2 flex justify-center"
+>
+  {isLoading ? (
+    <RotatingLines
+      strokeColor="white"
+      strokeWidth="5"
+      animationDuration="0.75"
+      width="24"
+      visible={true}
+    />
+  ) : (
+    <span>{id === undefined ? "Cadastrar" : "Atualizar"}</span>
+  )}
+</button>
                 {isLoading ? (
                   <RotatingLines
                     strokeColor="white"
@@ -201,7 +214,6 @@ function FormDepartamento() {
                 ) : (
                   <span>{id === undefined ? "Cadastrar" : "Atualizar"}</span>
                 )}
-              </button>
 
 
 
@@ -219,6 +231,17 @@ function FormDepartamento() {
         <img className="sticky h-screen" src={ColunaDireita} alt="Coluna Direita" />
 
       </div>
+
+      <ConfirmModal
+  open={mostrarModal}
+  title={id === undefined ? "Tem certeza que deseja cadastrar?" : "Tem certeza que deseja atualizar?"}
+  onConfirm={(e) => {
+    setMostrarModal(false);
+    const fakeEvent = { preventDefault: () => {} } as React.ChangeEvent<HTMLFormElement>;
+    gerarNovoDepartamento(fakeEvent); // ou melhor ainda: separar função para executar sem event
+  }}
+  onCancel={() => setMostrarModal(false)}
+/>
     </>
   );
 }
