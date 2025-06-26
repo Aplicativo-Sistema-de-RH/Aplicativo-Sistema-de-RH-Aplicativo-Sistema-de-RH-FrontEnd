@@ -6,6 +6,7 @@ import {
   Search,
 } from "lucide-react";
 import Chart from 'react-apexcharts';
+import { ApexOptions, ApexNonAxisChartSeries } from "apexcharts";
 import { FaArrowRightArrowLeft, FaPen } from "react-icons/fa6";
 import { Table } from "../../components/table/table";
 import { TableHeader } from "../../components/table/table-header";
@@ -46,7 +47,10 @@ export default function TabelaGerencia() {
   const [totalCargos, setTotalCargos] = useState(0)
   const [isCharLoading, setIsCharLoading] = useState(true)
 
-  const [chartDataDepartamento, setchartDataDepartamento] = useState({
+  const [chartDataDepartamento, setchartDataDepartamento] = useState<{
+    series: ApexNonAxisChartSeries;
+    options: ApexOptions;
+  }>({
     series: [0],
     options: {
       chart: {
@@ -69,7 +73,10 @@ export default function TabelaGerencia() {
     },
   });
 
-  const [chartDataMediaSalario, setchartDataMediaSalario] = useState({
+  const [chartDataMediaSalario, setchartDataMediaSalario] = useState<{
+    series: ApexNonAxisChartSeries;
+    options: ApexOptions;
+  }>({
     series: [{
       data: [0]
     }],
