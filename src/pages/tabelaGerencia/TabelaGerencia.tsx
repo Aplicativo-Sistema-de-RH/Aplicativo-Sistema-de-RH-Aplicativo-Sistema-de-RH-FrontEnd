@@ -6,6 +6,7 @@ import {
   Search,
 } from "lucide-react";
 import Chart from 'react-apexcharts';
+import { ApexOptions } from "apexcharts";
 import { FaArrowRightArrowLeft, FaPen } from "react-icons/fa6";
 import { Table } from "../../components/table/table";
 import { TableHeader } from "../../components/table/table-header";
@@ -46,7 +47,10 @@ export default function TabelaGerencia() {
   const [totalCargos, setTotalCargos] = useState(0)
   const [isCharLoading, setIsCharLoading] = useState(true)
 
-  const [chartDataDepartamento, setchartDataDepartamento] = useState({
+  const [chartDataDepartamento, setchartDataDepartamento] = useState<{
+    series: ApexNonAxisChartSeries;
+    options: ApexOptions;
+  }>({
     series: [0],
     options: {
       chart: {
@@ -69,7 +73,10 @@ export default function TabelaGerencia() {
     },
   });
 
-  const [chartDataMediaSalario, setchartDataMediaSalario] = useState({
+  const [chartDataMediaSalario, setchartDataMediaSalario] = useState<{
+    series: ApexAxisChartSeries;
+    options: ApexOptions;
+  }>({
     series: [{
       data: [0]
     }],
@@ -413,7 +420,7 @@ export default function TabelaGerencia() {
             return (
               <TableRow key={user.id}>
                 <TableCell className="flex gap-3 items-center">
-                  <img src={user.foto.length > 10 ? user.foto : noPicture} alt="foto do usuario" className="w-9 h-9 border-2 border-gray-700 rounded-full" />
+                  <img src={user.foto?.length > 10 ? user.foto : noPicture} alt="foto do usuario" className="w-9 h-9 border-2 border-gray-700 rounded-full" />
                   <div className='flex flex-col gap-1'>
                     <span className='font-semibold text-whitek'>
                       {user.nome}
